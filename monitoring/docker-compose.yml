@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # mysqldb:
+  #   image:  mysql
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=201122934
+  #     - MYSQL_PASSWORD=201122934
+  #     - MYSQL_DATABASE=dbMusic
+  #   ports:
+  #     - 3307:3306
+
+  mysql:
+    image: mysql:8.0
+    container_name: mi_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 201122934
+      MYSQL_DATABASE: dbProyecto
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ROOT_HOST: '%'
+    # command: --disable-public-key-lookup
+    volumes:
+      - ./baseDeDatos:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3320:3306"
+
+  backendo_node:
+    build:
+      context: ./backend  # Ruta a la carpeta que contiene el códibackendo_node de tu servidor backendo_node
+    container_name: backendo_node
+    links:
+      - mysql
+    ports:
+      - "3000:3000"  # Puerto del servidor backendo_node
+    depends_on:
+      - mysql
+
+    # - db_data:/var/lib/mysql
+
+  frontend:
+    image: react-vite
+    build:
+      context: ./metrica  # Ruta a la carpeta que contiene el código backendo_node de tu backend en React
+    container_name: frontend
+    # environment:
+    #   - BACK=backendo_node
+    links:
+      - backendo_node
+    ports:
+      - "5173:5173"  # Puerto del backend en React
+    depends_on:
+      - backendo_node
+
+volumes:
+  mysql_data:

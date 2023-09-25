@@ -1,0 +1,17 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: marcstu2007/proyectoso:0.1.0-go
+    command: go run main.go
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3010:3010"  # Puerto del backend 
+    privileged: true  # Habilita el privilegio para matar procesos
+    environment:
+      - SERVER_IP=35.245.123.73  # cambiar la ip
+
+      # docker-compose up
