@@ -4,12 +4,10 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"os"
 	"os/exec"
 	"strconv"
 	"time"
-
-	"github.com/rs/cors" // Importa la biblioteca CORS
+	// Importa la biblioteca CORS
 )
 
 func main() {
@@ -18,18 +16,35 @@ func main() {
 	ticker := time.NewTicker(time.Second * time.Duration(interval))
 	defer ticker.Stop()
 
-	// Configura CORS con las opciones deseadas
-	corsOptions := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"}, // Permite solicitudes desde cualquier origen
+	// Función para habilitar CORS
+	enableCors := func(w http.ResponseWriter) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept")
+	}
+
+	http.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) {
+		enableCors(w)
+		// fmt.Fprintf(w, "Se accedio a la ruta /kill")
+		MatarID(w, r)
 	})
 
-	// Crea un manejador HTTP con CORS
-	handler := corsOptions.Handler(http.HandlerFunc(handleRequest))
+	http.HandleFunc("/live", func(w http.ResponseWriter, r *http.Request) {
+		enableCors(w)
+		fmt.Fprintf(w, "live")
+	})
+
+	// Manejador para otras rutas
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		ruta := r.URL.Path
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Error: ruta no valida  '%s'", ruta)
+	})
 
 	// Inicia el servidor HTTP
 	go func() {
 		fmt.Println("Servidor en ejecución en el puerto :3010")
-		http.ListenAndServe(":3010", handler)
+		http.ListenAndServe(":3010", nil)
 	}()
 
 	for {
@@ -95,65 +110,9 @@ func MatarID(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Proceso con ID %d ha sido terminado.\n", pid)
 }
 
-// handleRequest maneja la solicitud de envío de datos
-func handleRequest(w http.ResponseWriter, r *http.Request) {
-
-	if r.Method == http.MethodGet {
-		MatarID(w, r)
-		return
-	} else if r.Method != http.MethodPost {
-		http.Error(w, "Método no permitido", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Lee el cuerpo de la solicitud
-	var buf bytes.Buffer
-	_, err1 := buf.ReadFrom(r.Body)
-	if err1 != nil {
-		http.Error(w, "Error al leer el cuerpo de la solicitud", http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "Datos recibidos exitosamente")
-}
-
-// HadleRequest maneja la solicitud de matar proceso
-func handleRequest1(w http.ResponseWriter, r *http.Request) {
-	http.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) {
-		// Obtener el parámetro "pid" de la solicitud
-		pidStr := r.URL.Query().Get("pid")
-		if pidStr == "" {
-			http.Error(w, "Debes proporcionar un ID de proceso (pid)", http.StatusBadRequest)
-			return
-		}
-
-		// Convertir el parámetro "pid" a un número entero
-		pid, err := strconv.Atoi(pidStr)
-		if err != nil {
-			http.Error(w, "El ID de proceso (pid) debe ser un número válido", http.StatusBadRequest)
-			return
-		}
-
-		// Construir el comando para matar el proceso
-		cmd := exec.Command("kill", fmt.Sprintf("%d", pid))
-
-		// Redirigir la salida estándar y de error del comando al de la respuesta HTTP
-		cmd.Stdout = w
-		cmd.Stderr = w
-
-		// Ejecutar el comando para matar el proceso
-		if err := cmd.Run(); err != nil {
-			fmt.Fprintf(w, "Error al matar el proceso: %v\n", err)
-			return
-		}
-
-		fmt.Fprintf(w, "Proceso con ID %d ha sido terminado.\n", pid)
-	})
-}
-
 func enviarDatosAlServidor(data string) error {
-	serverIP := os.Getenv("SERVER_IP")
+	// serverIP := os.Getenv("SERVER_IP")
+	serverIP := "localhost"
 
 	// url := "http://172.19.0.4:3000/insert" // Reemplaza con la URL de tu servidor y endpoint
 	url := "http://" + serverIP + ":3000/insert" // Reemplaza con la URL de tu servidor y endpoint
