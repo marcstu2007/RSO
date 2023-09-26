@@ -42,7 +42,7 @@ function MatarPID(PID){
 
   // Realizar la solicitud POST usando Axios
   axios
-    .post("http://34.125.6.168:3000/pid", data, {
+    .post("http://34.16.183.137:3000/pid", data, {
       headers: {
         "Content-Type": "application/json", // Asegúrate de que el servidor pueda entender JSON
       },
