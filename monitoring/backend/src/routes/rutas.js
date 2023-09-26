@@ -9,8 +9,6 @@ router.get('/rendimiento', async(req,res)=>{
     res.json(resultado)
 })
 
-
-
 // Json de pruebas
 // router.get('/rendimiento',(req,res)=>{
 //     res.json(data)
