@@ -44,9 +44,10 @@ router.get('/tareas', (req,res)=>{
     res.json(tareas)
 })
 
-router.get('/ip',function(req, response) {
-    const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    res.send(ipAddress);
+router.get('/ip',(req, response) => {
+    // const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    // res.send(ipAddress);
+    res.send('ip address')
 });
 
 module.exports = router;
