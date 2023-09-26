@@ -1,1 +1,0 @@
-savedcmd_/home/marco/Documentos/Repositorio/SOPES1/SO1_2S2023_201122934/Proyecto1/ram/ram_201122934.mod := printf '%s\n'   ram_201122934.o | awk '!x[$$0]++ { print("/home/marco/Documentos/Repositorio/SOPES1/SO1_2S2023_201122934/Proyecto1/ram/"$$0) }' > /home/marco/Documentos/Repositorio/SOPES1/SO1_2S2023_201122934/Proyecto1/ram/ram_201122934.mod

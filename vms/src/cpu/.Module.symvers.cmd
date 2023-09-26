@@ -1,1 +1,0 @@
-savedcmd_/home/marco/Documentos/Repositorio/SOPES1/SO1_2S2023_201122934/Proyecto1/cpu/Module.symvers :=  scripts/mod/modpost       -o /home/marco/Documentos/Repositorio/SOPES1/SO1_2S2023_201122934/Proyecto1/cpu/Module.symvers -n -T /home/marco/Documentos/Repositorio/SOPES1/SO1_2S2023_201122934/Proyecto1/cpu/modules.order -i Module.symvers -e 

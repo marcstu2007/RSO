@@ -25,7 +25,7 @@ router.get('/rendimiento', async(req,res)=>{
 // })
 
 let tareas = []
-http://localhost:3000/insert
+//http://localhost:3000/insert
 router.post('/insert', async(req,res)=>{
     const idpc = req.body.idpc
     const {ram_total,ram_usada,ram_libre,ram_cache,ram_porcentaje_en_uso,cpu_porcentaje_en_uso,processes,running,sleeping,zombie,stopped,total} = req.body.rendimiento.ram
