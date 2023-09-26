@@ -26,7 +26,7 @@ let tareas = []
 //http://localhost:3000/insert
 router.post('/insert', async(req,res)=>{
     const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    const ip_address =ipAddress.split(':')[1]
+    const ip_address =ipAddress.split(':')
     console.log(ip_address)
     const idpc = req.body.idpc
     const {ram_total,ram_usada,ram_libre,ram_cache,ram_porcentaje_en_uso,cpu_porcentaje_en_uso,processes,running,sleeping,zombie,stopped,total} = req.body.rendimiento.ram
@@ -49,8 +49,8 @@ router.get('/tareas', (req,res)=>{
 
 router.get('/ip', (req,res)=>{
     const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    console.log("ip: "+ipAddress.split(':')[0])
-    res.send(ipAddress.split(':')[0]);
+    console.log("ip: "+ipAddress.split(':'))
+    res.send("ip: "+ipAddress.split(':'));
 })
 
 module.exports = router;
