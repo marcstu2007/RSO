@@ -27,6 +27,7 @@ let tareas = []
 router.post('/insert', async(req,res)=>{
     const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
     const ip_address =ipAddress.split(':')[1]
+    console.log(ip_address)
     const idpc = req.body.idpc
     const {ram_total,ram_usada,ram_libre,ram_cache,ram_porcentaje_en_uso,cpu_porcentaje_en_uso,processes,running,sleeping,zombie,stopped,total} = req.body.rendimiento.ram
     const [rows] = await pool.query('INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stoppeds, total) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);',
