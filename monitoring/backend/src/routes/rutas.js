@@ -24,22 +24,55 @@ router.get('/rendimiento', async(req,res)=>{
 
 let tareas = []
 //http://localhost:3000/insert
-router.post('/insert', async(req,res)=>{
+router.post('/insert', async (req, res) => {
     const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    const ip_address =ipAddress.split(':')
-    console.log(ip_address)
-    const idpc = req.body.idpc
-    const {ram_total,ram_usada,ram_libre,ram_cache,ram_porcentaje_en_uso,cpu_porcentaje_en_uso,processes,running,sleeping,zombie,stopped,total} = req.body.rendimiento.ram
-    const [rows] = await pool.query('INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stoppeds, total) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);',
-    [ip_address, ram_total,ram_usada,ram_libre,ram_cache,ram_porcentaje_en_uso,cpu_porcentaje_en_uso,running,sleeping,zombie,stopped,total])
-    tareas=processes
-    console.log(tareas)
-    res.send(
-        {
-        id: rows.iduso,
-        ip_address,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stopped, total,
-    })
-})
+    const ip_address = ipAddress.split(':').pop(); // Obtenemos la dirección IP sin '::ffff:'
+    console.log(ip_address);
+    const idpc = req.body.idpc;
+    const {
+        ram_total,
+        ram_usada,
+        ram_libre,
+        ram_cache,
+        ram_porcentaje_en_uso,
+        cpu_porcentaje_en_uso,
+        processes,
+        running,
+        sleeping,
+        zombie,
+        stopped,
+        total
+    } = req.body.rendimiento.ram;
+    
+    try {
+        const [rows] = await pool.query('INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stopped, total) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);',
+        [idpc, ram_total, ram_usada, ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stopped, total]);
+        
+        tareas = processes;
+        
+        console.log(tareas);
+        
+        res.status(200).json({
+            id: rows.insertId, // Se asume que la columna tiene una propiedad autoincrementable llamada 'id'
+            ip_address,
+            ram_total,
+            ram_usada,
+            ram_libre,
+            ram_cache,
+            ram_porcentaje_en_uso,
+            cpu_porcentaje_en_uso,
+            running,
+            sleeping,
+            zombie,
+            stopped,
+            total,
+        });
+    } catch (error) {
+        console.error("Error al insertar en la base de datos:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
 
 //obtener las tareas
 //http://localhost:3000/tareas
