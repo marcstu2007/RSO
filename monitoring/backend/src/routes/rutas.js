@@ -47,7 +47,8 @@ router.get('/tareas', (req,res)=>{
 
 router.get('/ip', (req,res)=>{
     const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    res.send(ipAddress);
+    console.log("ip: "+ipAddress.split(':')[1])
+    res.send(ipAddress.split(':')[1]);
 })
 
 module.exports = router;

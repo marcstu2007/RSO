@@ -5,7 +5,7 @@ USE dbProyecto;
 -- cpu / 100
 CREATE TABLE IF NOT EXISTS Recurso(
     iduso INT PRIMARY KEY AUTO_INCREMENT,
-    idpc INT,
+    idpc VARCHAR(150),
     ram_total INT,
     ram_usada INT,
     ram_libre INT,
