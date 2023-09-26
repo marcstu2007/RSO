@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"os"
 	"os/exec"
 	"strconv"
 	"time"
@@ -111,8 +112,8 @@ func MatarID(w http.ResponseWriter, r *http.Request) {
 }
 
 func enviarDatosAlServidor(data string) error {
-	// serverIP := os.Getenv("SERVER_IP")
-	serverIP := "localhost"
+	serverIP := os.Getenv("SERVER_IP")
+	// serverIP := "localhost"
 
 	// url := "http://172.19.0.4:3000/insert" // Reemplaza con la URL de tu servidor y endpoint
 	url := "http://" + serverIP + ":3000/insert" // Reemplaza con la URL de tu servidor y endpoint
