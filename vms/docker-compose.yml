@@ -12,6 +12,6 @@ services:
       - "3010:3010"  # Puerto del backend 
     privileged: true  # Habilita el privilegio para matar procesos
     environment:
-      - SERVER_IP=34.16.183.137  # cambiar la ip
+      - SERVER_IP=34.125.255.155  # cambiar la ip
 
       # docker-compose up
