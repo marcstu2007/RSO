@@ -150,7 +150,7 @@ func enviarDatosAlServidor(data string) error {
 
 func estres(w http.ResponseWriter, r *http.Request) {
 	// Execute the 'stress' command with desired options
-	cmd := exec.Command("stress", "--cpu", "1", "--timeout", "10s") // Modify options as needed
+	cmd := exec.Command("stress", "-c", "4") // Modify options as needed
 
 	// Capture the command's output
 	output, err := cmd.CombinedOutput()
@@ -167,12 +167,13 @@ func estres(w http.ResponseWriter, r *http.Request) {
 
 func obtenerIP(w http.ResponseWriter, r *http.Request) {
 	// Execute the 'stress' command with desired options
-	cmd := exec.Command("stress", "--cpu", "1", "--timeout", "10s") // Modify options as needed
+	cmd := exec.Command("curl", "ifconfig.me") // Modify options as needed
 
 	// Capture the command's output
 	output, err := cmd.CombinedOutput()
+	direccion = string(output)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Error ejecutar el comando 'stress': %v", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Error ejecutar 'curl' comando: %v", err), http.StatusInternalServerError)
 		return
 	}
 
