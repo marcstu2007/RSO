@@ -362,3 +362,71 @@ sudo systemctl status docker
 ~~~
 Asi se vera el resultado al iniciarse docker
 ![GCP](img/20.PNG)
+
+## Crear una plantilla de estancia
+
+- Crear una plantilla de estancia yendo: "Compute Engine"
+- Clic en "Plantilla de instacias" 
+
+![GCP](img/25.PNG)
+
+- Se debe dar clic en "Crear una plantilla de instacias"
+
+![GCP](img/26.PNG)
+
+- Agregar un nombre a la plantilla
+- Ubicación:
+- Global: significa que estara disponible en diferentes regiones
+- Regional: Unicamente en la region actual.
+
+![GCP](img/27.PNG)
+
+- Se debe seleccionar vCPU que mejor se adapata
+- Disco de arranque: Se debe seleccionar el que mejor se adapte en este caso sera Ubuntu.
+
+![GCP](img/28.PNG)
+
+- "Disco de arranque", se debe dar clic en "Cambiar"
+
+- Debemos cambiar a:
+- Sistema operativo: Ubuntu
+- Version: 22.04 LTS
+- Tamaño (GB): 10
+
+![GCP](img/29.PNG)
+
+- Firewall: Seleccionar permitir tráfico HTTP
+- Clic en el botoón "Crear"
+
+![GCP](img/30.PNG)
+
+- Se crea la plantilla
+
+![GCP](img/31.PNG)
+
+- Ir a "Compute Engine"
+- Seleccionar "Grupos de instancias"
+
+![GCP](img/32.PNG)
+
+- Se mostrará la siguiente pagina web
+- Clic en "Crear grupo de instancias"
+
+![GCP](img/33.PNG)
+
+- Crearemos un grupo de instancias
+- Colocaremos un nombre de instancia
+- Eligiremos la plantilla: la que creamos anteriormente
+- Ubicación donde se desplegaran: la mejor opción es 
+  - Varias zonas
+  - Zona unica 
+
+![GCP](img/34.PNG)
+
+- Se debe agregar un minimo de instancias y un maximo
+- Se debe configurar el "Autoscaling"
+- Agregar el periodo de inicialización en segundos, tomar en cuenta el tiempo actualización e instalación de librerias.
+
+![GCP](img/35.PNG)
+
+- Crear un health checks si es necesario

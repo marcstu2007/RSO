@@ -11,10 +11,13 @@ import (
 	// Importa la biblioteca CORS
 )
 
+var direccion string
+
 func main() {
 	// Lanzar un goroutine que ejecute la función cada n segundos
 	interval := 10 // segundos
 	ticker := time.NewTicker(time.Second * time.Duration(interval))
+
 	defer ticker.Stop()
 
 	// Función para habilitar CORS
@@ -26,13 +29,25 @@ func main() {
 
 	http.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) {
 		enableCors(w)
-		// fmt.Fprintf(w, "Se accedio a la ruta /kill")
 		MatarID(w, r)
 	})
 
 	http.HandleFunc("/live", func(w http.ResponseWriter, r *http.Request) {
 		enableCors(w)
-		fmt.Fprintf(w, "live")
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "Live.\n")
+	})
+
+	http.HandleFunc("/stress", func(w http.ResponseWriter, r *http.Request) {
+		enableCors(w)
+		estres(w, r)
+		fmt.Fprintf(w, "Estres")
+	})
+
+	http.HandleFunc("/ip", func(w http.ResponseWriter, r *http.Request) {
+		enableCors(w)
+		obtenerIP(w, r)
+		fmt.Fprintf(w, "IP")
 	})
 
 	// Manejador para otras rutas
@@ -131,4 +146,39 @@ func enviarDatosAlServidor(data string) error {
 	}
 
 	return nil
+}
+
+func estres(w http.ResponseWriter, r *http.Request) {
+	// Execute the 'stress' command with desired options
+	cmd := exec.Command("stress", "--cpu", "1", "--timeout", "10s") // Modify options as needed
+
+	// Capture the command's output
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error al ejecutar 'stress' comando: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Write the command's output as the HTTP response
+	w.Header().Set("Content-Type", "text/plain")
+	w.WriteHeader(http.StatusOK)
+	w.Write(output)
+}
+
+func obtenerIP(w http.ResponseWriter, r *http.Request) {
+	// Execute the 'stress' command with desired options
+	cmd := exec.Command("curl", "ifconfig.me") // Modify options as needed
+
+	// Capture the command's output
+	output, err := cmd.CombinedOutput()
+	direccion = string(output)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error ejecutar 'curl' comando: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Write the command's output as the HTTP response
+	w.Header().Set("Content-Type", "text/plain")
+	w.WriteHeader(http.StatusOK)
+	w.Write(output)
 }
