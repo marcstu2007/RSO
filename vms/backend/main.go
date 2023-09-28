@@ -152,29 +152,17 @@ func estres(w http.ResponseWriter, r *http.Request) {
 	// Execute the 'stress' command with desired options
 	cmd := exec.Command("stress", "--cpu", "2", "--timeout", "60s")
 
-	// Redirigir la salida estándar y de error del comando al de la respuesta HTTP
-	cmd.Stdout = w
-	cmd.Stderr = w
-
-	// Ejecutar el comando para matar el proceso
-	if err := cmd.Run(); err != nil {
-		fmt.Fprintf(w, "Error al poner en estres en la vms: %v\n", err)
+	// Capture the command's output
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error al ejecutar 'stress' comando: %v", err), http.StatusInternalServerError)
 		return
 	}
+
+	// Write the command's output as the HTTP response
+	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Proceso con ID ha sido terminado.\n")
-
-	// // Capture the command's output
-	// output, err := cmd.CombinedOutput()
-	// if err != nil {
-	// 	http.Error(w, fmt.Sprintf("Error al ejecutar 'stress' comando: %v", err), http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// // Write the command's output as the HTTP response
-	// w.Header().Set("Content-Type", "text/plain")
-	// w.WriteHeader(http.StatusOK)
-	// w.Write(output)
+	w.Write(output)
 }
 
 func obtenerIP(w http.ResponseWriter, r *http.Request) {
