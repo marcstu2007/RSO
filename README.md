@@ -145,7 +145,7 @@ npm i prop-types
 npm install --save chart.js react-chartjs-2
 ~~~
 ### Interfaz de la aplicación
-La aplicación se vera de esta manera en el navegeador.
+La aplicación se vera de esta manera en el navegador.
 
 ![FrontEnd](img/25.jpeg)
 
