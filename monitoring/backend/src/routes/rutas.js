@@ -1,13 +1,17 @@
-const express = require('express')
-const router = express.Router()
-const data = require('../data/data.json')
-const pool = require('../db');
+const express = require("express");
+const router = express.Router();
+const data = require("../data/data.json");
+const pool = require("../db");
+const bodyParser = require("body-parser");
+const axios = require("axios");
 
 //obtener el rendimiento
-router.get('/rendimiento', async(req,res)=>{
-    const [resultado] = await pool.query('SELECT * FROM Recurso ORDER BY iduso DESC;')
-    res.json(resultado)
-})
+router.get("/rendimiento", async (req, res) => {
+  const [resultado] = await pool.query(
+    "SELECT * FROM Recurso ORDER BY iduso DESC;"
+  );
+  res.json(resultado);
+});
 
 // Json de pruebas
 // router.get('/rendimiento',(req,res)=>{
@@ -22,68 +26,119 @@ router.get('/rendimiento', async(req,res)=>{
 //     console.log(result)
 // })
 
-let tareas = []
+let tareas = [];
 //http://localhost:3000/insert
-router.post('/insert', async (req, res) => {
-    const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    const ip_address = ipAddress.split(':').pop(); // Obtenemos la dirección IP sin '::ffff:'
-    console.log(ip_address);
-    const idpc = req.body.idpc;
-    const {
+router.post("/insert", async (req, res) => {
+  const ipAddress = req.header("x-forwarded-for") || req.socket.remoteAddress;
+  const ip_address = ipAddress.split(":").pop(); // Obtenemos la dirección IP sin '::ffff:'
+  console.log(ip_address);
+  const idpc = req.body.idpc;
+  const {
+    ram_total,
+    ram_usada,
+    ram_libre,
+    ram_cache,
+    ram_porcentaje_en_uso,
+    cpu_porcentaje_en_uso,
+    processes,
+    running,
+    sleeping,
+    zombie,
+    stopped,
+    total,
+  } = req.body.rendimiento.ram;
+
+  try {
+    const [rows] = await pool.query(
+      "INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stoppeds, total) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);",
+      [
+        ip_address,
         ram_total,
         ram_usada,
         ram_libre,
         ram_cache,
         ram_porcentaje_en_uso,
         cpu_porcentaje_en_uso,
-        processes,
         running,
         sleeping,
         zombie,
         stopped,
-        total
-    } = req.body.rendimiento.ram;
-    
-    try {
-        const [rows] = await pool.query('INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stoppeds, total) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);',
-        [ip_address, ram_total, ram_usada, ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stopped, total]);
-        
-        tareas = processes;
-        
-        console.log(tareas);
-        
-        res.status(200).json({
-            id: rows.iduso, // Se asume que la columna tiene una propiedad autoincrementable llamada 'id'
-            ip_address,
-            ram_total,
-            ram_usada,
-            ram_libre,
-            ram_cache,
-            ram_porcentaje_en_uso,
-            cpu_porcentaje_en_uso,
-            running,
-            sleeping,
-            zombie,
-            stopped,
-            total,
-        });
-    } catch (error) {
-        console.error("Error al insertar en la base de datos:", error);
-        res.status(500).json({ error: "Error interno del servidor" });
-    }
-});
+        total,
+      ]
+    );
 
+    tareas = processes;
+
+    console.log(tareas);
+
+    res.status(200).json({
+      id: rows.iduso, // Se asume que la columna tiene una propiedad autoincrementable llamada 'id'
+      ip_address,
+      ram_total,
+      ram_usada,
+      ram_libre,
+      ram_cache,
+      ram_porcentaje_en_uso,
+      cpu_porcentaje_en_uso,
+      running,
+      sleeping,
+      zombie,
+      stopped,
+      total,
+    });
+  } catch (error) {
+    console.error("Error al insertar en la base de datos:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
 
 //obtener las tareas
 //http://localhost:3000/tareas
-router.get('/tareas', (req,res)=>{
-    res.json(tareas)
-})
+router.get("/tareas", (req, res) => {
+  res.json(tareas);
+});
 
-router.get('/ip', (req,res)=>{
-    const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    console.log("ip: "+ipAddress.split(':'))
-    res.send("ip: "+ipAddress.split(':'));
-})
+router.get("/ip", (req, res) => {
+  const ipAddress = req.header("x-forwarded-for") || req.socket.remoteAddress;
+  console.log("ip: " + ipAddress.split(":"));
+  res.send("ip: " + ipAddress.split(":"));
+});
+
+router.get("/live", (req, res) => {
+  res.json({ estado: "live" });
+});
+
+// {"pid":121212,
+// "ip":"34.16.183.137"}
+router.post("/pid", async (req, res) => {
+    //http://localhost:3000/pid
+  // Verificar si el campo "pid" está presente en el JSON recibido
+
+  try {
+    if (req.body && req.body.pid) {
+      const pid = req.body.pid;
+      const ip = req.body.ip;
+
+      // Realizar aquí cualquier operación que necesites con "pid"
+      console.log(`PID recibido: ${pid}`);
+      console.log(`IP recibido: ${ip}`);
+
+      // Enviar el valor de "ip" a otro servidor utilizando Axios
+      const response = await axios.post("https://" + ip + ":3010/kill?pid=" + pid);
+
+      console.log("Respuesta del otro servidor:", response.data);
+
+      res
+        .status(200)
+        .send("Solicitud recibida con éxito y enviada al otro servidor");
+      res.status(200).send("Solicitud recibida con éxito");
+    } else {
+      res.status(400).send('El JSON no contiene el campo "pid"');
+    }
+  } catch (error) {
+    console.error("Error al enviar a otro servidor:", error);
+    res.status(500).send("Error al enviar a otro servidor");
+  }
+});
 
 module.exports = router;
