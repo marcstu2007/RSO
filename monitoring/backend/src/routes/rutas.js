@@ -69,7 +69,7 @@ router.post("/insert", async (req, res) => {
         ram_libre,
         ram_cache,
         ram_porcentaje_en_uso,
-        cpu_porcentaje_en_uso,
+        cpu_porcentaje_en_uso/100,
         running,
         sleeping,
         zombie,
