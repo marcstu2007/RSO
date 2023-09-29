@@ -10,7 +10,7 @@ const axios = require("axios");
 // {
 //   "ip":"34.125.140.180"
 // }
-router.get("/rendimiento", async (req, res) => {
+router.post("/rendimiento", async (req, res) => {
   IPDireccion=req.body.ip
   // const ipAddress = "34.125.140.180"; // IP que deseas consultar
   console.log("Dirección: ",IPDireccion)
