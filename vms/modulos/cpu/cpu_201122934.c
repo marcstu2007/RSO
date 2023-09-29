@@ -48,7 +48,8 @@ static int escribir_a_proc(struct seq_file *file_proc, void *v)
     for_each_process(task) {
         unsigned long cpu_time = jiffies_to_msecs(task->utime + task->stime);
         // unsigned long cpu_percentage = (cpu_time * 100) / total_cpu_time;
-        cpu_percentage = jiffies_to_msecs(cpu_time) / total_cpu_time;
+        // cpu_percentage = jiffies_to_msecs(cpu_time) / total_cpu_time;
+        cpu_percentage = (cpu_time * 100) / total_cpu_time; // Calcula el porcentaje
         total_usage += cpu_time;
     }
     //---------------------------------------------------------------------------

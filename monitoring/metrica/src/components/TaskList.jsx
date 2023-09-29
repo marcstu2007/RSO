@@ -16,10 +16,16 @@ function TaskList() {
   return (
 
       <div className="grid grid-cols-2 gap-2 p-4 rounded-md max-w-2xl mx-auto">
-        {tasks.map((tasks) => (
+        {/* {tasks.map((tasks) => (
           <TaskCard key={tasks.id} tasks={tasks} />
-        ))}
+        ))} */}
+
+            <TaskCard key={0} tasks={tasks[0]} />
+            {/* <TaskCard key={1} tasks={tasks[1]} />             */}
+
+
       </div>
+      
   );
 }
 
