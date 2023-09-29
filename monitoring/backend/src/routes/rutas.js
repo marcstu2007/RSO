@@ -13,7 +13,7 @@ const axios = require("axios");
 router.get("/rendimiento", async (req, res) => {
   IPDireccion=req.body.ip
   // const ipAddress = "34.125.140.180"; // IP que deseas consultar
-  console.log(ipAddress("Dirección: ",IPDireccion))
+  console.log("Dirección: ",IPDireccion)
   try {
     const query = "SELECT * FROM Recurso WHERE idpc = ? ORDER BY fecha_hora DESC LIMIT 10";
     const [resultado] = await pool.query(query, [IPDireccion]);
