@@ -111,8 +111,8 @@ router.get("/live", (req, res) => {
 router.get("/listaip", async (req, res) => {
   console.log("Listar ip");
   const result = await pool.query("SELECT DISTINCT(idpc) FROM Recurso WHERE fecha_hora >= NOW() - INTERVAL 10 MINUTE order by idpc desc limit 4");
-  res.json(result);
-  console.log(result);
+  res.json(result[0]);
+  console.log(result[0]);
 });
 
 // {"pid":121212,
