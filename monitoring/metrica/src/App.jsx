@@ -2,6 +2,7 @@ import TaskList from "./components/TaskList";
 import TaskForm from "./TaskForm.jsx";
 import TaskPID from "./TaskPID";
 import Detalle from "./components/route/Detail";
+import Combo from "./Combo";
 
 function App() {
   return (
@@ -10,14 +11,7 @@ function App() {
         <h1 className="text-2xl font-bold text-white text-center mb-3 ">
           Modulos de kernel
         </h1>
-        <select>
-          <option value="grapefruit">Grapefruit</option>
-          <option value="lime">Lime</option>
-          {/* <option selected value="coconut">
-            Coconut
-          </option> */}
-          <option value="mango">Mango</option>
-        </select>
+        <Combo/>
         <TaskList />
         {/* <TaskForm /> */}
         <TaskPID />

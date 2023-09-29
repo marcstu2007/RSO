@@ -6,11 +6,22 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 
 //obtener el rendimiento
+//http://localhost:3000/rendimiento
+// {
+//   "ip":"34.125.140.180"
+// }
 router.get("/rendimiento", async (req, res) => {
-  const [resultado] = await pool.query(
-    "SELECT * FROM Recurso ORDER BY iduso DESC;"
-  );
-  res.json(resultado);
+  IPDireccion=req.body.ip
+  // const ipAddress = "34.125.140.180"; // IP que deseas consultar
+  console.log(ipAddress("Dirección: ",IPDireccion))
+  try {
+    const query = "SELECT * FROM Recurso WHERE idpc = ? ORDER BY fecha_hora DESC LIMIT 10";
+    const [resultado] = await pool.query(query, [IPDireccion]);
+    res.json(resultado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener datos de rendimiento." });
+  }
 });
 
 // Json de pruebas
