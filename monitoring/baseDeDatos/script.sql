@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS Recurso(
     sleeping INT,
     zombie INT,
     stoppeds INT,
-    total INT
+    total INT,
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Es necesario dividir entre 100
@@ -28,7 +29,8 @@ CREATE TABLE IF NOT EXISTS Tarea(
     usuario INT,
     estado INT,
     ram INT,
-    cpu_percentaje DECIMAL(5, 2)
+    cpu_percentaje DECIMAL(5, 2),
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 /* Instrucciones

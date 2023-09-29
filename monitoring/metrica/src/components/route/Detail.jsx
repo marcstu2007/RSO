@@ -7,7 +7,7 @@ function Detail() {
   const makeAPICall = async () => {
     console.log('makeAPICall')
     try {
-      const response = await fetch("http://34.125.255.155:3000/tareas", {
+      const response = await fetch("http://34.125.140.180:3000/tareas", {
         mode: "cors",
       });
       const data = await response.json();
