@@ -108,10 +108,17 @@ router.get("/live", (req, res) => {
   res.json({ estado: "live" });
 });
 
+router.get("/listaip", async (req, res) => {
+  console.log("Listar ip");
+  const result = await pool.query("SELECT DISTINCT(idpc) FROM Recurso WHERE fecha_hora >= NOW() - INTERVAL 10 MINUTE order by idpc desc limit 4");
+  res.json(result);
+  console.log(result);
+});
+
 // {"pid":121212,
 // "ip":"34.16.183.137"}
 router.post("/pid", async (req, res) => {
-    //http://localhost:3000/pid
+  //http://localhost:3000/pid
   // Verificar si el campo "pid" está presente en el JSON recibido
 
   try {
@@ -124,7 +131,9 @@ router.post("/pid", async (req, res) => {
       console.log(`IP recibido: ${ip}`);
 
       // Enviar el valor de "ip" a otro servidor utilizando Axios
-      const response = await axios.post("https://" + ip + ":3010/kill?pid=" + pid);
+      const response = await axios.post(
+        "https://" + ip + ":3010/kill?pid=" + pid
+      );
 
       console.log("Respuesta del otro servidor:", response.data);
 
