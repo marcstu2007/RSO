@@ -4,7 +4,7 @@ function Combo() {
   const [selectedOption, setSelectedOption] = useState('');
   const consultarIP = async () => {
     try {
-      const respuesta = await fetch(`http://34.125.140.180:3000/listaip`, {
+      const respuesta = await fetch(`http://backendo_node:3000/listaip`, {
         mode: "cors",
       });
       setInfo(await respuesta.json());
