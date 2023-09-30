@@ -27,7 +27,7 @@ function Detail() {
        setInfoP([
         ...recursos.rendimiento.ram.processes
       ]);
-      
+      creatTasksPID(recursos.rendimiento.ram.processes)
     } catch (error) {
       console.error(error);
     }
@@ -58,7 +58,7 @@ function Detail() {
   useEffect(() => {
     consultarProcesos()
     // makeAPICall();
-  }, []);
+  }, [ipElegido]);
 
   const cargarPIDs = (ev, id) => {
     console.log("Me ejecute ")
