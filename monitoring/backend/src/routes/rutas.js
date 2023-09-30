@@ -11,11 +11,12 @@ const axios = require("axios");
 //   "ip":"34.125.140.180"
 // }
 router.post("/rendimiento", async (req, res) => {
-  IPDireccion=req.body.ip
+  IPDireccion = req.body.ip;
   // const ipAddress = "34.125.140.180"; // IP que deseas consultar
-  console.log("Dirección: ",IPDireccion)
+  console.log("Dirección: ", IPDireccion);
   try {
-    const query = "SELECT * FROM Recurso WHERE idpc = ? ORDER BY fecha_hora DESC LIMIT 10";
+    const query =
+      "SELECT * FROM Recurso WHERE idpc = ? ORDER BY fecha_hora DESC LIMIT 10";
     const [resultado] = await pool.query(query, [IPDireccion]);
     res.json(resultado);
   } catch (error) {
@@ -69,7 +70,7 @@ router.post("/insert", async (req, res) => {
         ram_libre,
         ram_cache,
         ram_porcentaje_en_uso,
-        cpu_porcentaje_en_uso/100,
+        cpu_porcentaje_en_uso / 100,
         running,
         sleeping,
         zombie,
@@ -109,6 +110,32 @@ router.get("/tareas", (req, res) => {
   res.json(tareas);
 });
 
+http://localhost:3000/tareasip
+
+router.post("/tareasip", (req, res) => {
+  const direccion = req.body.ip;
+  const direccionCompleta = "http://" + direccion + ":3010/process";
+
+  // Opciones de configuración de la solicitud (opcional)
+  const config = {
+    method: "get", // Puedes usar 'get', 'post', 'put', 'delete', etc.
+  };
+
+  let respuesta
+  // Hacer la solicitud HTTP
+  axios(direccionCompleta, config)
+    .then((response) => {
+      console.log("Respuesta del servidor:", response.data);
+      respuesta = response.data;
+    })
+    .catch((error) => {
+      respuesta = error
+      console.error("Error al hacer la solicitud:", error);
+    });
+
+  res.json(respuesta);
+});
+
 router.get("/ip", (req, res) => {
   const ipAddress = req.header("x-forwarded-for") || req.socket.remoteAddress;
   console.log("ip: " + ipAddress.split(":"));
@@ -121,7 +148,9 @@ router.get("/live", (req, res) => {
 
 router.get("/listaip", async (req, res) => {
   console.log("Listar ip");
-  const result = await pool.query("SELECT DISTINCT(idpc) FROM Recurso WHERE fecha_hora >= NOW() - INTERVAL 10 MINUTE order by idpc desc limit 4");
+  const result = await pool.query(
+    "SELECT DISTINCT(idpc) FROM Recurso WHERE fecha_hora >= NOW() - INTERVAL 10 MINUTE order by idpc desc limit 4"
+  );
   res.json(result[0]);
   console.log(result[0]);
 });
