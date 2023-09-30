@@ -182,7 +182,7 @@ router.post("/pid", async (req, res) => {
 
       // Enviar el valor de "ip" a otro servidor utilizando Axios
       const response = await axios.post(
-        "https://" + ip + ":3010/kill?pid=" + pid
+        "http://" + ip + ":3010/kill?pid=" + pid
       );
 
       console.log("Respuesta del otro servidor:", response.data);
@@ -195,8 +195,8 @@ router.post("/pid", async (req, res) => {
       res.status(400).send('El JSON no contiene el campo "pid"');
     }
   } catch (error) {
-    console.error("Error al enviar a otro servidor:", error);
-    res.status(500).send("Error al enviar a otro servidor");
+    console.error("Error al enviar a otro servidor: ", error);
+    res.status(500).send("Error al enviar a otro servidor: ",error);
   }
 });
 
