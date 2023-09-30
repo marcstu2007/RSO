@@ -115,6 +115,11 @@ http://localhost:3000/tareasip
 router.post("/tareasip", (req, res) => {
   const direccion = req.body.ip;
   const direccionCompleta = "http://" + direccion + ":3010/process";
+  
+  if (!direccion) {
+    return res.status(400).json({ error: "La dirección IP no se ha proporcionado en el cuerpo de la solicitud." });
+  }
+
 
   // Opciones de configuración de la solicitud (opcional)
   const config = {
@@ -124,15 +129,18 @@ router.post("/tareasip", (req, res) => {
   // let respuesta
   // Hacer la solicitud HTTP
   axios(direccionCompleta, config)
-    .then((response) => {
+    .then(async (response) => {
       console.log("Respuesta del servidor:", response.data);
       // respuesta = response.data;
-      res.json(respuesta.data);
+     // Espera un momento para asegurarse de que la respuesta esté completamente disponible
+     await new Promise(resolve => setTimeout(resolve, 100));
+         // Devuelve la respuesta al cliente
+    res.json(response.data);
     })
     .catch((error) => {
       // respuesta = error
-      res.json(error);
       console.error("Error al hacer la solicitud:", error);
+      res.status(500).json({ error: "Error al hacer la solicitud." });
     });
 
   
