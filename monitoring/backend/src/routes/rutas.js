@@ -121,19 +121,21 @@ router.post("/tareasip", (req, res) => {
     method: "get", // Puedes usar 'get', 'post', 'put', 'delete', etc.
   };
 
-  let respuesta
+  // let respuesta
   // Hacer la solicitud HTTP
   axios(direccionCompleta, config)
     .then((response) => {
       console.log("Respuesta del servidor:", response.data);
-      respuesta = response.data;
+      // respuesta = response.data;
+      res.json(respuesta.data);
     })
     .catch((error) => {
-      respuesta = error
+      // respuesta = error
+      res.json(error);
       console.error("Error al hacer la solicitud:", error);
     });
 
-  res.json(respuesta);
+  
 });
 
 router.get("/ip", (req, res) => {

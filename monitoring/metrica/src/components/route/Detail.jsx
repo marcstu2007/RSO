@@ -13,7 +13,8 @@ function Detail() {
     }
 
     try {
-      const respuesta = await fetch(`http://34.16.164.106:3000/rendimiento`, {
+      console.log("ip: ",ipElegido);
+      const respuesta = await fetch(`http://34.16.164.106:3000/tareasip`, {
         method: "POST",
         mode: "cors",
         headers: {
@@ -21,10 +22,11 @@ function Detail() {
         },
         body: JSON.stringify({ "ip": ipElegido }),
       });
-      const recursos = await respuesta.json();
-      setInfoP([
-        recursos[0].process
-      ]);
+      const recursos = await respuesta;
+      console.log("::: ",recursos)
+      // setInfoP([
+      //   recursos[0].process
+      // ]);
       
     } catch (error) {
       console.error(error);
@@ -34,7 +36,7 @@ function Detail() {
 
 
 
-  // consultarProcesos()
+  consultarProcesos()
   // console.log("===> ",infoP)
 
 
