@@ -3,18 +3,12 @@ import { TaskContext } from "../../context/TaskContext";
 
 function Detail() {
   const [process, setProcess] = useState([]);
-  const { idPid, creatTasksPID,ipSeleccionado } = useContext(TaskContext);
-
+  const { idPid, creatTasksPID } = useContext(TaskContext);
   const makeAPICall = async () => {
     console.log('makeAPICall')
     try {
       const response = await fetch("http://34.16.164.106:3000/tareas", {
-        method: "POST",
         mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ip: ipSeleccionado }),
       });
       const data = await response.json();
       console.log("datoss: "+data[1].name)
@@ -28,9 +22,6 @@ function Detail() {
   useEffect(() => {
     makeAPICall();
   }, []);
-
-
-  
 
   const cargarPIDs = (ev, id) => {
     if (ev.pid >= id) {
