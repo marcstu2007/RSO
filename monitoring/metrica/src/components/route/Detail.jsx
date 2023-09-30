@@ -22,11 +22,11 @@ function Detail() {
         },
         body: JSON.stringify({ "ip": ipElegido }),
       });
-      const recursos = await respuesta;
-      console.log("::: ",recursos)
-      // setInfoP([
-      //   recursos[0].process
-      // ]);
+      const recursos = await respuesta.json();
+      // console.log("::: ",recursos.rendimiento.ram.processes)
+       setInfoP([
+        ...recursos.rendimiento.ram.processes
+      ]);
       
     } catch (error) {
       console.error(error);
@@ -36,30 +36,32 @@ function Detail() {
 
 
 
-  consultarProcesos()
+  
   // console.log("===> ",infoP)
 
 
-  const makeAPICall = async () => {
-    console.log('makeAPICall')
-    try {
-      const response = await fetch("http://34.16.164.106:3000/tareas", {
-        mode: "cors",
-      });
-      const data = await response.json();
-      console.log("datoss: "+data[1].name)
-      setProcess([...data]);
-      // console.log("datos: "+data.rendimiento.ram.processes)
-      creatTasksPID(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const makeAPICall = async () => {
+  //   console.log('makeAPICall')
+  //   try {
+  //     const response = await fetch("http://34.16.164.106:3000/tareas", {
+  //       mode: "cors",
+  //     });
+  //     const data = await response.json();
+  //     console.log("datoss: "+data[1].name)
+  //     setProcess([...data]);
+  //     // console.log("datos: "+data.rendimiento.ram.processes)
+  //     creatTasksPID(data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   useEffect(() => {
-    makeAPICall();
+    consultarProcesos()
+    // makeAPICall();
   }, []);
 
   const cargarPIDs = (ev, id) => {
+    console.log("Me ejecute ")
     if (ev.pid >= id) {
       return (
         <div
@@ -81,7 +83,8 @@ function Detail() {
       <h3 className="text-xl font-bold capitalize text-center text-white">
         Procesos en ejecución
       </h3>
-      {process.map((ev) => cargarPIDs(ev, idPid))}
+      {
+      infoP.map((ev) => cargarPIDs(ev, idPid))}
     </div>
   );
 }
