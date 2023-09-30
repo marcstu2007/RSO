@@ -61,7 +61,7 @@ router.post("/insert", async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      "INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stoppeds, total, procesos) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);",
+      "INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, processes, running, sleeping, zombie, stoppeds, total) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);",
       [
         ip_address,
         ram_total,
