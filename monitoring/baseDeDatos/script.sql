@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS Recurso(
     ram_cache INT,
     ram_porcentaje_en_uso DECIMAL(5, 2),
     cpu_porcentaje_en_uso DECIMAL(5, 2),
+    processes JSON,
     running INT,
     sleeping INT,
     zombie INT,

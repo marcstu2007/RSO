@@ -61,7 +61,7 @@ router.post("/insert", async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      "INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stoppeds, total) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);",
+      "INSERT INTO Recurso(idpc,ram_total,ram_usada,ram_libre, ram_cache, ram_porcentaje_en_uso, cpu_porcentaje_en_uso, running, sleeping, zombie, stoppeds, total, procesos) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);",
       [
         ip_address,
         ram_total,
@@ -70,6 +70,7 @@ router.post("/insert", async (req, res) => {
         ram_cache,
         ram_porcentaje_en_uso,
         cpu_porcentaje_en_uso/100,
+        processes,
         running,
         sleeping,
         zombie,
@@ -91,6 +92,7 @@ router.post("/insert", async (req, res) => {
       ram_cache,
       ram_porcentaje_en_uso,
       cpu_porcentaje_en_uso,
+      processes,
       running,
       sleeping,
       zombie,
@@ -105,7 +107,9 @@ router.post("/insert", async (req, res) => {
 
 //obtener las tareas
 //http://localhost:3000/tareas
-router.get("/tareas", (req, res) => {
+router.post("/tareas", (req, res) => {
+  const ip_recibido= req.body.ip
+
   res.json(tareas);
 });
 
