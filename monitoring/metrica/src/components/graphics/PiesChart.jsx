@@ -29,7 +29,7 @@ export default function PiesCPU() {
         Number(recursos[0].ram_porcentaje_en_uso),
         100 - Number(recursos[0].ram_porcentaje_en_uso),
       ]);
-      
+      console.log("-----",recursos)
     } catch (error) {
       console.error(error);
     }

@@ -3,7 +3,41 @@ import { TaskContext } from "../../context/TaskContext";
 
 function Detail() {
   const [process, setProcess] = useState([]);
-  const { idPid, creatTasksPID } = useContext(TaskContext);
+  const { idPid, creatTasksPID, ipElegido } = useContext(TaskContext);
+  const [infoP, setInfoP] = useState([]);
+
+
+  const consultarProcesos = async () => {
+    if (ipElegido == "") {
+      return;
+    }
+
+    try {
+      const respuesta = await fetch(`http://34.16.164.106:3000/rendimiento`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ "ip": ipElegido }),
+      });
+      const recursos = await respuesta.json();
+      setInfoP([
+        recursos[0].process
+      ]);
+      
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+
+
+  // consultarProcesos()
+  // console.log("===> ",infoP)
+
+
   const makeAPICall = async () => {
     console.log('makeAPICall')
     try {

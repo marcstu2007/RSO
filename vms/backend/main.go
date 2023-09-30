@@ -57,6 +57,35 @@ func main() {
 		fmt.Fprintf(w, "Error: ruta no valida  '%s'", ruta)
 	})
 
+	//=btener todos los procesos
+	http.HandleFunc("/process", func(w http.ResponseWriter, r *http.Request) {
+		enableCors(w)
+
+		fmt.Println("Llamada desde process:")
+
+		cmd := exec.Command("sh", "-c", "cat /proc/ram_201122934")
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			fmt.Println(err)
+		}
+		output := string(out[:])
+
+		// Ejecutando CPU
+		cmdCPU := exec.Command("sh", "-c", "cat /proc/cpu_201122934")
+		outCPU, errCPU := cmdCPU.CombinedOutput()
+		if errCPU != nil {
+			fmt.Println(errCPU)
+		}
+		outputCPU := string(outCPU[:])
+		fmt.Println(output)
+		fmt.Println(outputCPU)
+
+		// Ejecutar la función para enviar datos al servidor
+		maquina := "1"
+
+		fmt.Fprintf(w, "{\"idpc\": "+maquina+",\n \"rendimiento\":"+output+outputCPU+"\n}")
+	})
+
 	// Inicia el servidor HTTP
 	go func() {
 		fmt.Println("Servidor en ejecución en el puerto :3010")
