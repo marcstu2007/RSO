@@ -5,7 +5,7 @@ function Combo() {
   const [info, setInfo] = useState([]);
   const [processIP, setProcessIP] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
-  const {createDatosRAM, createCPU} = useContext(TaskContext)
+  const {createDatosRAM, createCPU, createIPElegido} = useContext(TaskContext)
 
   // Obtiene los ultimas ip de los ultimos 10 minutos, limitado a 4 resultados
   const consultarIP = async () => {
@@ -29,6 +29,7 @@ function Combo() {
 // Consultar por dirección IP
   const consultarProcesos = async (req, res, next) => {
     // console.log("Dirección IP: ",selectedOption, " ", typeof selectedOption)
+    createIPElegido(selectedOption)
     if (selectedOption === "") {
       return;
     }

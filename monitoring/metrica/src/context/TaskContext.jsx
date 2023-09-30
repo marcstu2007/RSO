@@ -10,6 +10,12 @@ export function TaskContextProvider(props) {
   const [tasksPID, setTasksPID] = useState([]); // Array completo cargado con datos de PID
   const [datosRam, setDatosRam] = useState([0.5,0.5]); // Array RAM
   const [datosCpu, setDatosCpu] = useState([0.5,0.5]); // Array CPU
+  const [ipElegido, setIpElegido] = useState([]); //IP elegido
+
+  function createIPElegido(value) {
+    setIpElegido([value]);
+    // console.log("Inicio:::  ",value);
+  }
 
   function createDatosRAM(value) {
     // console.log("inicio: ",value);
@@ -74,6 +80,8 @@ function creatTasksPID(value) {
         datosRam,
         createCPU,
         datosCpu,
+        ipElegido,
+        createIPElegido,
       }}
     >
       {props.children}
