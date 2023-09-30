@@ -1,36 +1,74 @@
-import React, { useContext,useState  } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import {TaskContext} from "../../context/TaskContext"
+import { TaskContext } from "../../context/TaskContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// console.log();
-
 export default function PiesCPU() {
-  const {datosCpu} = useContext(TaskContext)
-   console.log("pies cpu",datosCpu[0])
+  const { datosCpu, ipSeleccionado } = useContext(TaskContext);
+  const [data, setData] = useState({
+    labels: ["uso de CPU", "CPU libre"],
+    datasets: [
+      {
+        label: "% de CPU",
+        data: datosCpu[0],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  });
 
-  const data = {
+  useEffect(() => {
+    const updateData = async () => {
+      if (ipSeleccionado === "") {
+        return;
+      }
 
-      labels: ["uso de CPU", "CPU libre"],
-      datasets: [
-        {
-          label: "% de CPU",
-          data: datosCpu[0],
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
+      try {
+        const respuesta = await fetch(`http://34.16.164.106:3000/rendimiento`, {
+          method: 'POST',
+          mode: "cors",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ip: ipSeleccionado })
+        });
+
+        const recursos = await respuesta.json();
+        const setCPU = [
+          Number(recursos[0].cpu_porcentaje_en_uso),
+          100 - Number(recursos[0].cpu_porcentaje_en_uso)
+        ];
+
+        setData((prevData) => ({
+          ...prevData,
+          datasets: [
+            {
+              ...prevData.datasets[0],
+              data: setCPU,
+            },
           ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
+        }));
+        console.log(setCPU);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    
+    const intervalId = setInterval(updateData, 10000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [ipSeleccionado]);
+
   return <Pie data={data} />;
 }

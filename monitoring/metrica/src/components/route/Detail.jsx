@@ -4,6 +4,7 @@ import { TaskContext } from "../../context/TaskContext";
 function Detail() {
   const [process, setProcess] = useState([]);
   const { idPid, creatTasksPID } = useContext(TaskContext);
+
   const makeAPICall = async () => {
     console.log('makeAPICall')
     try {
@@ -22,6 +23,9 @@ function Detail() {
   useEffect(() => {
     makeAPICall();
   }, []);
+
+
+  
 
   const cargarPIDs = (ev, id) => {
     if (ev.pid >= id) {
