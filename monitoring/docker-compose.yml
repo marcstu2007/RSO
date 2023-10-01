@@ -11,7 +11,7 @@ services:
   #     - 3307:3306
 
   mysql:
-    image: mysql:8.0
+    image: marcstu2007/mysql:8.0
     container_name: mi_mysql
     environment:
       MYSQL_ROOT_PASSWORD: 201122934
@@ -39,7 +39,7 @@ services:
     # - db_data:/var/lib/mysql
 
   frontend:
-    image: react-vite
+    image: marcstu2007/react-vite:0.1.0-react
     build:
       context: ./metrica  # Ruta a la carpeta que contiene el código backendo_node de tu backend en React
     container_name: frontend
