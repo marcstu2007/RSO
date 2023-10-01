@@ -14,7 +14,7 @@ function Detail() {
 
     try {
       console.log("ip: ",ipElegido);
-      const respuesta = await fetch(`http://34.16.164.106:3000/tareasip`, {
+      const respuesta = await fetch(`http://backendo_node:3000/tareasip`, {
         method: "POST",
         mode: "cors",
         headers: {
@@ -43,7 +43,7 @@ function Detail() {
   // const makeAPICall = async () => {
   //   console.log('makeAPICall')
   //   try {
-  //     const response = await fetch("http://34.16.164.106:3000/tareas", {
+  //     const response = await fetch("http://backendo_node:3000/tareas", {
   //       mode: "cors",
   //     });
   //     const data = await response.json();

@@ -10,7 +10,7 @@ function Combo() {
   // Obtiene los ultimas ip de los ultimos 10 minutos, limitado a 4 resultados
   const consultarIP = async () => {
     try {
-      const respuesta = await fetch(`http://34.16.164.106:3000/listaip`, {
+      const respuesta = await fetch(`http://backendo_node:3000/listaip`, {
         mode: "cors",
       });
       setInfo(await respuesta.json());
@@ -38,7 +38,7 @@ function Combo() {
     }
 
     try {
-      const respuesta = await fetch(`http://34.16.164.106:3000/rendimiento`, {
+      const respuesta = await fetch(`http://backendo_node:3000/rendimiento`, {
         method: 'POST',
         mode: "cors",
         headers:{

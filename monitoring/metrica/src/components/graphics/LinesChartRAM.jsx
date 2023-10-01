@@ -16,7 +16,7 @@ export default function LinesChartRAM() {
         }
 
         try {
-            const respuesta = await fetch(`http://34.16.164.106:3000/rendimiento`, {
+            const respuesta = await fetch(`http://backendo_node:3000/rendimiento`, {
                 method: "POST",
                 mode: "cors",
                 headers: {
