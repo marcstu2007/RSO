@@ -6,7 +6,7 @@ import { TaskContext } from "../../context/TaskContext";
 export default function LinesChartRAM() {
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
-    const { ipElegido } = useContext(TaskContext);
+    const { ipElegido, maquina } = useContext(TaskContext);
     const [infoCPU, setInfoCPU] = useState([]);
 
     // Función para consultar el uso de CPU
@@ -16,7 +16,7 @@ export default function LinesChartRAM() {
         }
 
         try {
-            const respuesta = await fetch(`http://backendo_node:3000/rendimiento`, {
+            const respuesta = await fetch(`http://${maquina}:3000/rendimiento`, {
                 method: "POST",
                 mode: "cors",
                 headers: {

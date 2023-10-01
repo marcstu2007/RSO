@@ -4,7 +4,7 @@ import Detalle from './components/route/Detail'
 import axios from 'axios';
 
 function TaskPID() {
-  const { searchIdPid, idPid, tasksPID, ipElegido} = useContext(TaskContext);
+  const { searchIdPid, idPid, tasksPID, ipElegido, maquina} = useContext(TaskContext);
 
   function existPID(PID){
     console.log('Estoy buscando')
@@ -43,7 +43,7 @@ function MatarPID(PID){
 
   // Realizar la solicitud POST usando Axios
   axios
-    .post("http://backendo_node:3000/pid", data, {
+    .post(`http://${maquina}:3000/pid`, data, {
       headers: {
         "Content-Type": "application/json", // Asegúrate de que el servidor pueda entender JSON
       },

@@ -6,7 +6,7 @@ import { TaskContext } from "../../context/TaskContext";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function PiesCPU() {
-  const { ipElegido } = useContext(TaskContext);
+  const { ipElegido, maquina } = useContext(TaskContext);
   const [infoRAM, setInfoRAM] = useState([]);
 
   // Función para consultar el uso de CPU
@@ -16,7 +16,7 @@ export default function PiesCPU() {
     }
 
     try {
-      const respuesta = await fetch(`http://backendo_node:3000/rendimiento`, {
+      const respuesta = await fetch(`http://${maquina}:3000/rendimiento`, {
         method: "POST",
         mode: "cors",
         headers: {
