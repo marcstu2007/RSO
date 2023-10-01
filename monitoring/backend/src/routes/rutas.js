@@ -16,7 +16,7 @@ router.post("/rendimiento", async (req, res) => {
   console.log("Dirección: ", IPDireccion);
   try {
     const query =
-      "SELECT * FROM Recurso WHERE idpc = ? ORDER BY fecha_hora DESC LIMIT 10";
+      "SELECT * FROM Recurso WHERE idpc = ? ORDER BY fecha_hora DESC LIMIT 12";
     const [resultado] = await pool.query(query, [IPDireccion]);
     res.json(resultado);
   } catch (error) {

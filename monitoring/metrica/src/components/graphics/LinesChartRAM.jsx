@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from "chart.js";
 import { TaskContext } from "../../context/TaskContext";
 
-export default function LinesChart() {
+export default function LinesChartRAM() {
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
     const { ipElegido } = useContext(TaskContext);
@@ -25,9 +25,9 @@ export default function LinesChart() {
                 body: JSON.stringify({ "ip": ipElegido }),
             });
             const recursos = await respuesta.json();
-            const cpuPorcentajes = recursos.map((dato) => parseFloat(dato.cpu_porcentaje_en_uso));
+            const cpuPorcentajes = recursos.map((dato) => parseFloat(dato.ram_porcentaje_en_uso));
             setInfoCPU([...cpuPorcentajes]);
-            console.log("CPU porcentaje ==> ", cpuPorcentajes);
+            // console.log("CPU porcentaje ==> ", cpuPorcentajes);
         } catch (error) {
             console.error(error);
         }
@@ -52,7 +52,7 @@ export default function LinesChart() {
         labels: meses,
         datasets: [
             {
-                label: "CPU",
+                label: "RAM",
                 data: beneficios,
                 tension: 0.5,
                 fill: true,
