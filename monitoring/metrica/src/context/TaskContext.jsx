@@ -11,7 +11,7 @@ export function TaskContextProvider(props) {
   const [datosRam, setDatosRam] = useState([0.5,0.5]); // Array RAM
   const [datosCpu, setDatosCpu] = useState([0.5,0.5]); // Array CPU
   const [ipElegido, setIpElegido] = useState([]); //IP elegido
-  const [maquina, setMaquina] = useState('34.16.164.106'); //
+  const [maquina, setMaquina] = useState('34.125.219.221'); //
 
   function createIPElegido(value) {
     setIpElegido([value]);
